@@ -47,6 +47,8 @@ public class MovieSearchApi {
         return theMovieApiResponseDto;
     }
 
+
+
     private static HttpHeaders makeHeaders() {
         //헤더 설정
         HttpHeaders httpHeaders = new HttpHeaders();
