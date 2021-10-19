@@ -1,7 +1,5 @@
-package com.sparta.NeflixCloneCodingProjectBack.largecategory;
+package com.sparta.NeflixCloneCodingProjectBack.domain;
 
-import com.sparta.NeflixCloneCodingProjectBack.smallcategory.SmallCategory;
-import com.sparta.NeflixCloneCodingProjectBack.video.Video;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +24,6 @@ public class LargeCategory {
     @OneToMany(mappedBy = "largeCategory", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SmallCategory> smallCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "largeCategory", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<Video> video = new ArrayList<>();
+    @OneToMany(mappedBy = "largecategory",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<VideoLargeCategory> videoLargeCategories = new ArrayList<>();
 }

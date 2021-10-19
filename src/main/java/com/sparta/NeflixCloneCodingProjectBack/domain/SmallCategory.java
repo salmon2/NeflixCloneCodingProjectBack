@@ -1,7 +1,6 @@
-package com.sparta.NeflixCloneCodingProjectBack.smallcategory;
+package com.sparta.NeflixCloneCodingProjectBack.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sparta.NeflixCloneCodingProjectBack.largecategory.LargeCategory;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,10 +20,12 @@ public class SmallCategory {
     @Column(nullable = false)
     private String smallCategory;
 
+    @Column(nullable = false)
+    private int smallCategorynumber;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "largecategoryId")
     private LargeCategory largeCategory;
-
 
 }
