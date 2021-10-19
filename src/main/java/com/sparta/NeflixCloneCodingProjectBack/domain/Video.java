@@ -1,6 +1,5 @@
 package com.sparta.NeflixCloneCodingProjectBack.domain;
 
-import com.sparta.NeflixCloneCodingProjectBack.dto.TheMovieApiResponseResultList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
