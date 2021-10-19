@@ -1,4 +1,4 @@
-package com.sparta.NeflixCloneCodingProjectBack.dto;
+package com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibygenredto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class TheMovieApiResponseResultList {
     private Boolean adult;
     private String backdrop_path;

@@ -1,4 +1,4 @@
-package com.sparta.NeflixCloneCodingProjectBack.dto;
+package com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibygenredto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TheMovieApiResponseDto {
+public class TheMovieApiByGenreResponseDto {
     private Float page;
     private Float total_page;
     private List<TheMovieApiResponseResultList> results = new ArrayList<>();
