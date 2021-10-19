@@ -1,11 +1,12 @@
 package com.sparta.NeflixCloneCodingProjectBack.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,14 +19,16 @@ public class SmallCategory {
     private Long id;
 
     @Column(nullable = false)
-    private String smallCategory;
+    private String smallCategoryName;
 
     @Column(nullable = false)
-    private int smallCategorynumber;
+    private int smallCategoryNumber;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "largecategoryId")
-    private LargeCategory largeCategory;
+    @OneToMany(mappedBy = "smallCategory", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<VideoSmallCategory> videoSmallCategoryList = new ArrayList<>();
 
+    public SmallCategory(String smallCategory, int smallCategoryNumber) {
+        this.smallCategoryName = smallCategory;
+        this.smallCategoryNumber = smallCategoryNumber;
+    }
 }

@@ -14,16 +14,19 @@ import java.util.List;
 @NoArgsConstructor
 public class LargeCategory {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
-    private String largecategory;
+    private String largeCategoryName;
 
     @OneToMany(mappedBy = "largeCategory", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<SmallCategory> smallCategories = new ArrayList<>();
+    private List<Video> videoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "largecategory",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<VideoLargeCategory> videoLargeCategories = new ArrayList<>();
+
+    public LargeCategory(String largeCategoryName) {
+        this.largeCategoryName = largeCategoryName;
+    }
 }
