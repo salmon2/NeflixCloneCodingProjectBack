@@ -1,10 +1,11 @@
 package com.sparta.NeflixCloneCodingProjectBack.service;
 
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.LargeCategoryDto;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
+@Service
+public interface VideoService {
+    public LargeCategoryDto process(String genre);
 
-public interface VideoService{
-
-    public List<LargeCategoryDto> findAll(String movie);
+    public LargeCategoryDto findtosmallcategory(String movie, String smallcategory);
 }

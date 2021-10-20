@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Video {
-    public Video(TheMovieApiResponseResultList movie, VideoListResult youtube, LargeCategory largeCategory, MovieGenre genre) {
+    public Video(TheMovieApiResponseResultList movie, VideoListResult youtube, LargeCategory largeCategory) {
         this.adult = movie.getAdult();
         this.title = movie.getTitle();
         this.original_language = movie.getOriginal_language();
@@ -37,7 +37,6 @@ public class Video {
         this.largeCategory = largeCategory;
 
         this.backdrop_path = "https://image.tmdb.org/t/p/w500"+movie.getBackdrop_path();
-        this.genrename = genre.getGenreName();
     }
 
 
@@ -74,7 +73,7 @@ public class Video {
     private String genrename;
 
     @OneToMany(mappedBy = "video",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<VideoSmallCategory> videoLargeCategories = new ArrayList<>();
+    private List<VideoSmallCategory> videoSmallCategoryList = new ArrayList<>();
 
     @ManyToOne
     @JsonIgnore

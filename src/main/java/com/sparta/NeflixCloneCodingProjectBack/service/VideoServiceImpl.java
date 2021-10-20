@@ -4,12 +4,11 @@ import com.sparta.NeflixCloneCodingProjectBack.MovieApi.MovieGenre;
 import com.sparta.NeflixCloneCodingProjectBack.domain.SmallCategory;
 import com.sparta.NeflixCloneCodingProjectBack.domain.Video;
 import com.sparta.NeflixCloneCodingProjectBack.domain.VideoSmallCategory;
-import com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibygenredto.TheMovieApiResponseResultList;
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.LargeCategoryDto;
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.SmallCategoryDto;
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.VideoResponseDto;
 import com.sparta.NeflixCloneCodingProjectBack.repository.VideoRepository;
-import com.sparta.NeflixCloneCodingProjectBack.repository.VideoSmallCategoryRepository;
+import com.sparta.NeflixCloneCodingProjectBack.repository.SmallCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,74 +18,71 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VideoServiceImpl implements VideoService {
-
+public class VideoServiceImpl implements VideoService{
     private final VideoRepository videoRepository;
-    private final VideoSmallCategoryRepository videoSmallCategoryRepository;
+    private final SmallCategoryRepository smallCategoryRepository;
+
 
     @Override
-    public List<LargeCategoryDto> findAll(String movie) {
-        List<LargeCategoryDto> largeCategoryDtos = getLargeCategoryDtos(movie);
+    public LargeCategoryDto process(String LargeGenre) {
 
-        return largeCategoryDtos;
-    }
+        List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
+        for (MovieGenre genre : MovieGenre.values()) {
 
+            List<VideoResponseDto> videoResponseDtoList = new ArrayList<>();
+            findVideoListByCategory(genre.getGenreName(), videoResponseDtoList);
 
-    private List<LargeCategoryDto> getLargeCategoryDtos(String movie) {
-        List<Video> responseVideo = videoRepository.findAll();
-        List<VideoResponseDto> videoResponseDtos = new ArrayList<>();
-        List<SmallCategoryDto> smallCategoryDtos = new ArrayList<>();
-        List<LargeCategoryDto> largeCategoryDtos = new ArrayList<>();
-
-
-        //video list 전부 끌어옴
-        for (Video video : responseVideo) {
-            if (video.getLargeCategory().getLargeCategoryName().equals(movie)) {
-
-                Long id = video.getId();
-                List<String> genreList = findGenreList(id);
-
-                VideoResponseDto videoResponseDto =
-                        new VideoResponseDto(genreList, video.getId(), video.getTitle(),
-                                video.getPosterPath(), video.getOverview(),
-                                video.getRelease_date(), video.getVote_average(),
-                                video.getYoutubePath(), video.getBackdrop_path());
-                videoResponseDtos.add(videoResponseDto);
-            }
+            SmallCategoryDto smallCategoryDto = new SmallCategoryDto(videoResponseDtoList.size(), genre.getGenreName(), videoResponseDtoList);
+            smallCategoryDtoList.add(smallCategoryDto);
         }
 
+        LargeCategoryDto largeCategoryDto = new LargeCategoryDto(LargeGenre, smallCategoryDtoList);
 
-        SmallCategoryDto smallCategoryDto = new SmallCategoryDto(
-                videoResponseDtos.size(), "액션", videoResponseDtos
-        );
-        smallCategoryDtos.add(smallCategoryDto);
-
-        SmallCategoryDto smallCategoryDto1 = new SmallCategoryDto(
-                videoResponseDtos.subList(11,20).size() ,"어드벤쳐", videoResponseDtos.subList(11,20)
-        );
-        smallCategoryDtos.add(smallCategoryDto1);
-
-
-
-        LargeCategoryDto largeCategoryDto = new LargeCategoryDto(
-                "영화", smallCategoryDtos
-        );
-        largeCategoryDtos.add(largeCategoryDto);
-        return largeCategoryDtos;
+        return largeCategoryDto;
     }
 
-    private List<String> findGenreList(Long id) {
-        List<String> selectGenreList = new ArrayList<>();
+    @Override
+    public LargeCategoryDto findtosmallcategory(String movie, String smallcategory) {
+        List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
+        List<VideoResponseDto> videoResponseDtoList = new ArrayList<>();
 
-        List<VideoSmallCategory> vsc = videoSmallCategoryRepository.findAllByVideoId(id);
-        for (VideoSmallCategory vs : vsc) {
-            for (MovieGenre value :MovieGenre.values()) {
-                if (vs.getSmallCategory().getSmallCategoryName().equals(value.getGenreName())){
-                    String genreName = value.getGenreName();
-                    selectGenreList.add(genreName);
+        findVideoListByCategory(smallcategory, videoResponseDtoList);
+
+        SmallCategoryDto smallCategoryDto = new SmallCategoryDto(videoResponseDtoList.size(), smallcategory, videoResponseDtoList);
+        smallCategoryDtoList.add(smallCategoryDto);
+
+        LargeCategoryDto largeCategoryDto = new LargeCategoryDto(movie, smallCategoryDtoList);
+
+        return largeCategoryDto;
+    }
+
+    private void findVideoListByCategory(String key, List<VideoResponseDto> videoResponseDtoList) {
+        SmallCategory findSmallCategory = smallCategoryRepository.findBySmallCategoryName(key);
+        System.out.println("Genre = " + key);
+
+        List<VideoSmallCategory> videoSmallCategoryList = findSmallCategory.getVideoSmallCategoryList();
+
+
+        int videoCount = 0;
+        for (VideoSmallCategory videoSmallCategory : videoSmallCategoryList) {
+
+            Video video = videoSmallCategory.getVideo();
+
+            List<VideoSmallCategory> videoSmallCategoryList1 = video.getVideoSmallCategoryList();
+            List<String> genre = new ArrayList<>();
+            for (VideoSmallCategory smallCategory : videoSmallCategoryList1) {
+                if(videoCount > 20) {
+                    return;
                 }
+                genre.add(smallCategory.getSmallCategory().getSmallCategoryName());
+
             }
+
+            VideoResponseDto newVideoResponseDto = new VideoResponseDto(genre, video.getId(), video.getTitle(), video.getPosterPath(), video.getOverview(),
+                    video.getRelease_date(), video.getVote_average(), video.getYoutubePath(), video.getBackdrop_path());
+
+            videoResponseDtoList.add(newVideoResponseDto);
+            videoCount +=1;
         }
-        return selectGenreList;
     }
 }

@@ -8,27 +8,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class VideoController {
-    private final String successMsg = "성공";
-    private final String failMsg ="실패";
 
-    public final VideoService videoService;
+    private final VideoService videoService;
 
     @GetMapping("/video")
-    public ResponseDto findAllVideo(@RequestParam String largeCategory) {
-        List<LargeCategoryDto> videoResponseDto = videoService.findAll(largeCategory);
+    public ResponseDto videoLargeCategory(@RequestParam String largeCategory){
+        LargeCategoryDto result = videoService.process(largeCategory);
 
-        return new ResponseDto(200L, successMsg, videoResponseDto);
+        return new ResponseDto(200L, "성공", result);
     }
-//
-//    @GetMapping("/videoCategory")
-//    public ResponseDto findVideoById(@RequestParam String largeCategory, @RequestParam String smallCategory) {
-//
-//
-//    }
+
+    @GetMapping("/videoCategory")
+    public ResponseDto videoSmallCategory(@RequestParam String largeCategory , @RequestParam String smallCategory) {
+        LargeCategoryDto result = videoService.findtosmallcategory(largeCategory, smallCategory);
+
+        return new ResponseDto(200L, "성공", result);
+    }
+
 
 }

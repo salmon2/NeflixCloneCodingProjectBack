@@ -32,5 +32,12 @@ public class RestTestController {
 
     }
 
+    @RequestMapping("/test")
+    public ResponseDto restTest3() throws Exception {
+
+        return new ResponseDto(500L, successMsg, null);
+
+    }
+
 
 }

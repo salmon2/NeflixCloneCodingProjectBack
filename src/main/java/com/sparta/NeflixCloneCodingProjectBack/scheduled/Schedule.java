@@ -34,7 +34,7 @@ public class Schedule {
 
     private static int count = 0;
 
-    @Scheduled(fixedDelay = 1000000) // scheduler 끝나는 시간 기준으로 1000 간격으로 실행
+    @Scheduled(fixedDelay = 100000000) // scheduler 끝나는 시간 기준으로 1000 간격으로 실행
     @Transactional
     public void scheduleDelayTask() throws Exception {
         count = count +1;
@@ -112,7 +112,7 @@ public class Schedule {
     }
 
     private Video videoSaveOrFind(TheMovieApiResponseResultList result, VideoListResult videoListResult, LargeCategory largeCategory,MovieGenre genre) {
-        Video newVideo = new Video(result, videoListResult, largeCategory, genre);
+        Video newVideo = new Video(result, videoListResult, largeCategory);
         videoRepository.save(newVideo);
         return newVideo;
     }
