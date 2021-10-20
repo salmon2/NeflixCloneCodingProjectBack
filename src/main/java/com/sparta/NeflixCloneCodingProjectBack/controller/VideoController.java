@@ -1,26 +1,27 @@
 package com.sparta.NeflixCloneCodingProjectBack.controller;
 
-import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.VideoResponseDto;
+import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.LargeCategoryDto;
 import com.sparta.NeflixCloneCodingProjectBack.service.VideoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class VideoController {
 
     public final VideoService videoService;
 
     @GetMapping("/video")
-    public String findAllVideo(Model model) {
-        List<VideoResponseDto> videoResponseDto = videoService.findAll();
+    public List<LargeCategoryDto> findAllVideo(Model model, @RequestParam String largeCategory) {
+        List<LargeCategoryDto> videoResponseDto = videoService.findAll(largeCategory);
         model.addAttribute("videoList", videoResponseDto);
 
-        return "videoList";
+        return videoResponseDto;
     }
 
 }

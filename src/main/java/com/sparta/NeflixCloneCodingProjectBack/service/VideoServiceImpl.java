@@ -5,6 +5,8 @@ import com.sparta.NeflixCloneCodingProjectBack.domain.SmallCategory;
 import com.sparta.NeflixCloneCodingProjectBack.domain.Video;
 import com.sparta.NeflixCloneCodingProjectBack.domain.VideoSmallCategory;
 import com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibygenredto.TheMovieApiResponseResultList;
+import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.LargeCategoryDto;
+import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.SmallCategoryDto;
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.VideoResponseDto;
 import com.sparta.NeflixCloneCodingProjectBack.repository.VideoRepository;
 import com.sparta.NeflixCloneCodingProjectBack.repository.VideoSmallCategoryRepository;
@@ -23,24 +25,41 @@ public class VideoServiceImpl implements VideoService {
     private final VideoSmallCategoryRepository videoSmallCategoryRepository;
 
     @Override
-    public List<VideoResponseDto> findAll() {
+    public List<LargeCategoryDto> findAll(String movie) {
         List<Video> responseVideo = videoRepository.findAll();
         List<VideoResponseDto> videoResponseDtos = new ArrayList<>();
+        List<SmallCategoryDto> smallCategoryDtos = new ArrayList<>();
+        List<LargeCategoryDto> largeCategoryDtos = new ArrayList<>();
 
 
         for (Video video : responseVideo) {
+            if (video.getLargeCategory().getLargeCategoryName().equals(movie)) {
 
-            Long id = video.getId();
-            List<String> genreList = findGenreList(id);
+                Long id = video.getId();
+                List<String> genreList = findGenreList(id);
 
-            VideoResponseDto videoResponseDto =
-                    new VideoResponseDto(genreList, video.getId(), video.getTitle(),
-                            video.getPosterPath(), video.getOverview(),
-                            video.getRelease_date(), video.getVote_average(),
-                            video.getYoutubePath());
-            videoResponseDtos.add(videoResponseDto);
+                VideoResponseDto videoResponseDto =
+                        new VideoResponseDto(genreList, video.getId(), video.getTitle(),
+                                video.getPosterPath(), video.getOverview(),
+                                video.getRelease_date(), video.getVote_average(),
+                                video.getYoutubePath());
+                videoResponseDtos.add(videoResponseDto);
+            }
         }
-        return videoResponseDtos;
+
+        SmallCategoryDto smallCategoryDto = new SmallCategoryDto(
+                videoResponseDtos.size() ,"액션", videoResponseDtos
+        );
+        smallCategoryDtos.add(smallCategoryDto);
+
+
+        LargeCategoryDto largeCategoryDto = new LargeCategoryDto(
+                "영화", smallCategoryDto
+        );
+        largeCategoryDtos.add(largeCategoryDto);
+
+
+        return largeCategoryDtos;
     }
 
     private List<String> findGenreList(Long id) {
