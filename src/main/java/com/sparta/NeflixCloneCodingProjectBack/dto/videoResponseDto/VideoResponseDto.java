@@ -20,4 +20,5 @@ public class VideoResponseDto {
     private String first_date;
     private Float grade;
     private String youtubePath;
+    private String backdrop_path;
 }

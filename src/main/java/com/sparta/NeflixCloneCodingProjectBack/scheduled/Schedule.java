@@ -74,7 +74,7 @@ public class Schedule {
             LargeCategory largeCategory = largeCategorySaveOrFind();
 
             //video
-            Video newVideo = videoSaveOrFind(result, findVideoUrl, largeCategory);
+            Video newVideo = videoSaveOrFind(result, findVideoUrl, largeCategory, genre);
 
             //smallCategory
             smallCategorySaveOrFind(genreList);
@@ -111,8 +111,8 @@ public class Schedule {
         }
     }
 
-    private Video videoSaveOrFind(TheMovieApiResponseResultList result, VideoListResult videoListResult, LargeCategory largeCategory) {
-        Video newVideo = new Video(result, videoListResult, largeCategory);
+    private Video videoSaveOrFind(TheMovieApiResponseResultList result, VideoListResult videoListResult, LargeCategory largeCategory,MovieGenre genre) {
+        Video newVideo = new Video(result, videoListResult, largeCategory, genre);
         videoRepository.save(newVideo);
         return newVideo;
     }

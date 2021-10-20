@@ -50,20 +50,26 @@ public class VideoServiceImpl implements VideoService {
                         new VideoResponseDto(genreList, video.getId(), video.getTitle(),
                                 video.getPosterPath(), video.getOverview(),
                                 video.getRelease_date(), video.getVote_average(),
-                                video.getYoutubePath());
+                                video.getYoutubePath(), video.getBackdrop_path());
                 videoResponseDtos.add(videoResponseDto);
             }
         }
 
 
         SmallCategoryDto smallCategoryDto = new SmallCategoryDto(
-                videoResponseDtos.size() ,"액션", videoResponseDtos
+                videoResponseDtos.size(), "액션", videoResponseDtos
         );
         smallCategoryDtos.add(smallCategoryDto);
 
+        SmallCategoryDto smallCategoryDto1 = new SmallCategoryDto(
+                videoResponseDtos.subList(11,20).size() ,"어드벤쳐", videoResponseDtos.subList(11,20)
+        );
+        smallCategoryDtos.add(smallCategoryDto1);
+
+
 
         LargeCategoryDto largeCategoryDto = new LargeCategoryDto(
-                "영화", smallCategoryDto
+                "영화", smallCategoryDtos
         );
         largeCategoryDtos.add(largeCategoryDto);
         return largeCategoryDtos;
