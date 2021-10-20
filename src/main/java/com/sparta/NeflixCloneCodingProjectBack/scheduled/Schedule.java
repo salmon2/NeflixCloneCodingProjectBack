@@ -15,6 +15,8 @@ import com.sparta.NeflixCloneCodingProjectBack.repository.SmallCategoryRepositor
 import com.sparta.NeflixCloneCodingProjectBack.repository.VideoSmallCategoryRepository;
 import com.sparta.NeflixCloneCodingProjectBack.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -31,14 +33,15 @@ public class Schedule {
     private final SmallCategoryRepository smallCategoryRepository;
     private final LargeCategoryRepository largeCategoryRepository;
     private final VideoSmallCategoryRepository videoSmallCategoryRepository;
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     private static int count = 0;
 
-    @Scheduled(fixedDelay = 10000) // scheduler 끝나는 시간 기준으로 1000 간격으로 실행
+    @Scheduled(fixedDelay = 100000) // scheduler 끝나는 시간 기준으로 1000 간격으로 실행
     @Transactional
     public void scheduleDelayTask() throws Exception {
         count = count +1;
-        System.out.println(count + "번째 스케쥴링 시작");
+        log.info("{}번째 스케줄 실행", count);
         videoRepository.deleteAll();
 
         for (MovieGenre genre : MovieGenre.values()) {
@@ -53,10 +56,10 @@ public class Schedule {
 
         int videoCount = 0;
         for (TheMovieApiResponseResultList result : results) {
-            System.out.println("videoCount = " + videoCount);
-            if(videoCount > 10)
-                break;
-
+            log.info("{}번째 비디오 작업 시작", videoCount);
+            if(videoCount > 10) {
+                return;
+            }
             Long id = result.getId();
             TheMovieApiByIdResponseDto theMovieApiByIdResponseDto = movieSearchApi.TheMovieDBSearchById(id);
             VideoListResult[] videoList = theMovieApiByIdResponseDto.getVideos().getResults();
@@ -139,6 +142,7 @@ public class Schedule {
                 }
             }
         }
+
         return selectGenreList;
     }
 

@@ -82,7 +82,7 @@ public class Video {
     private String backdrop_path;
 
     @OneToMany(mappedBy = "video",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<VideoSmallCategory> videoLargeCategories = new ArrayList<>();
+    private List<VideoSmallCategory> videoSmallCategoryList = new ArrayList<>();
 
     @ManyToOne
     @JsonIgnore
