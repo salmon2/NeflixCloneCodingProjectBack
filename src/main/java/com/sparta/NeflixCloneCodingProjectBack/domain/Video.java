@@ -1,5 +1,6 @@
 package com.sparta.NeflixCloneCodingProjectBack.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibygenredto.TheMovieApiResponseResultList;
 import com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibyiddto.VideoListResult;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Video {
-    public Video(TheMovieApiResponseResultList movie, VideoListResult youtube) {
+    public Video(TheMovieApiResponseResultList movie, VideoListResult youtube, LargeCategory largeCategory) {
         this.adult = movie.getAdult();
         this.title = movie.getTitle();
         this.original_language = movie.getOriginal_language();
@@ -24,9 +25,15 @@ public class Video {
         this.popularity = movie.getPopularity();
         this.posterPath = "https://image.tmdb.org/t/p/w500"+movie.getPoster_path();
         this.release_date = movie.getRelease_date();
-        this.youtubePath = "https://www.youtube.com/embed/"+youtube.getKey()+"?autoplay=1&mute=1";
+
+        if(youtube == null)
+            this.youtubePath = null;
+        else
+            this.youtubePath = "https://www.youtube.com/embed/"+youtube.getKey()+"?autoplay=1&mute=1";
+
         this.vote_average = movie.getVote_average();
         this.vote_count = movie.getVote_count();
+        this.largeCategory = largeCategory;
     }
 
     @Id
@@ -57,6 +64,11 @@ public class Video {
     private Long vote_count;
 
     @OneToMany(mappedBy = "video",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<VideoLargeCategory> videoLargeCategories = new ArrayList<>();
+    private List<VideoSmallCategory> videoLargeCategories = new ArrayList<>();
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "largeCategoryId")
+    private LargeCategory largeCategory;
 
 }
