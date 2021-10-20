@@ -26,12 +26,20 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<LargeCategoryDto> findAll(String movie) {
+        List<LargeCategoryDto> largeCategoryDtos = getLargeCategoryDtos(movie);
+
+        return largeCategoryDtos;
+    }
+
+
+    private List<LargeCategoryDto> getLargeCategoryDtos(String movie) {
         List<Video> responseVideo = videoRepository.findAll();
         List<VideoResponseDto> videoResponseDtos = new ArrayList<>();
         List<SmallCategoryDto> smallCategoryDtos = new ArrayList<>();
         List<LargeCategoryDto> largeCategoryDtos = new ArrayList<>();
 
 
+        //video list 전부 끌어옴
         for (Video video : responseVideo) {
             if (video.getLargeCategory().getLargeCategoryName().equals(movie)) {
 
@@ -47,6 +55,7 @@ public class VideoServiceImpl implements VideoService {
             }
         }
 
+
         SmallCategoryDto smallCategoryDto = new SmallCategoryDto(
                 videoResponseDtos.size() ,"액션", videoResponseDtos
         );
@@ -57,8 +66,6 @@ public class VideoServiceImpl implements VideoService {
                 "영화", smallCategoryDto
         );
         largeCategoryDtos.add(largeCategoryDto);
-
-
         return largeCategoryDtos;
     }
 

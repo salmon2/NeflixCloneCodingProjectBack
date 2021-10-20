@@ -34,7 +34,10 @@ public class Video {
         this.vote_average = movie.getVote_average();
         this.vote_count = movie.getVote_count();
         this.largeCategory = largeCategory;
+
+        this.backdrop_path = "https://image.tmdb.org/t/p/w500"+movie.getBackdrop_path();
     }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -62,6 +65,9 @@ public class Video {
     private Float vote_average;
     @Column
     private Long vote_count;
+
+    @Column
+    private String backdrop_path;
 
     @OneToMany(mappedBy = "video",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<VideoSmallCategory> videoLargeCategories = new ArrayList<>();
