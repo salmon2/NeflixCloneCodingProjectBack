@@ -41,10 +41,21 @@ public class Schedule {
         System.out.println(count + "번째 스케쥴링 시작");
         videoRepository.deleteAll();
 
-        TheMovieApiByGenreResponseDto theMovieApiResponseDto = movieSearchApi.TheMovieDBSearchByGenre(MovieGenre.Action);
+        for (MovieGenre genre : MovieGenre.values()) {
+            saveAllDomainDataByGenre(genre);
+        }
+
+    }
+
+    private void saveAllDomainDataByGenre(MovieGenre genre) throws Exception {
+        TheMovieApiByGenreResponseDto theMovieApiResponseDto = movieSearchApi.TheMovieDBSearchByGenre(genre);
         List<TheMovieApiResponseResultList> results = theMovieApiResponseDto.getResults();
 
+        int videoCount = 0;
         for (TheMovieApiResponseResultList result : results) {
+            System.out.println("videoCount = " + videoCount);
+            if(videoCount > 10)
+                break;
 
             Long id = result.getId();
             TheMovieApiByIdResponseDto theMovieApiByIdResponseDto = movieSearchApi.TheMovieDBSearchById(id);
@@ -69,9 +80,8 @@ public class Schedule {
             smallCategorySaveOrFind(genreList);
 
             vedioSmallCategorySaveOrFind(newVideo, genreList);
-
+            videoCount +=1;
         }
-
     }
 
     private VideoListResult findVideoUrl(VideoListResult[] videoList) {
