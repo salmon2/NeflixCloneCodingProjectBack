@@ -1,6 +1,8 @@
 package com.sparta.NeflixCloneCodingProjectBack.controller;
 
 import com.sparta.NeflixCloneCodingProjectBack.dto.ResponseDto;
+import com.sparta.NeflixCloneCodingProjectBack.dto.genredto.MovieDto;
+import com.sparta.NeflixCloneCodingProjectBack.dto.genredto.TVDto;
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.LargeCategoryDto;
 import com.sparta.NeflixCloneCodingProjectBack.service.VideoService;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +18,28 @@ public class VideoController {
     private final VideoService videoService;
 
     @GetMapping("/video")
-    public ResponseDto videoLargeCategory(@RequestParam String largeCategory){
+    public ResponseDto videoLargeCategory(@RequestParam String largeCategory) {
         LargeCategoryDto result = videoService.process(largeCategory);
 
         return new ResponseDto(200L, "성공", result);
     }
 
     @GetMapping("/videoCategory")
-    public ResponseDto videoSmallCategory(@RequestParam String largeCategory , @RequestParam String smallCategory) {
+    public ResponseDto videoSmallCategory(@RequestParam String largeCategory, @RequestParam String smallCategory) {
         LargeCategoryDto result = videoService.findtosmallcategory(largeCategory, smallCategory);
 
+        return new ResponseDto(200L, "성공", result);
+    }
+
+    @GetMapping("/videomovie")
+    public ResponseDto findAllMovieGenre() {
+        MovieDto result = videoService.findmoviegenre();
+        return new ResponseDto(200L, "성공", result);
+    }
+
+    @GetMapping("/videoTV")
+    public ResponseDto findAllTVGenre() {
+        TVDto result = videoService.findTVgenre();
         return new ResponseDto(200L, "성공", result);
     }
 
