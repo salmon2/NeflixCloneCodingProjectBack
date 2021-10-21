@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface VideoService {
-    public LargeCategoryDto process(String genre);
+    public LargeCategoryDto getTvShow();
 
-    public LargeCategoryDto findtosmallcategory(String movie, String smallcategory);
+    public LargeCategoryDto findMovieToSmallCategory(String movie, String smallcategory);
+
+    public LargeCategoryDto getMovie();
+
+    LargeCategoryDto getRandomShow();
 }

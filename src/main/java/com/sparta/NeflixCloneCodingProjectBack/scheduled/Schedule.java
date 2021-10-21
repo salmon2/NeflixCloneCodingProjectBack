@@ -99,8 +99,6 @@ public class Schedule {
         TheDramaApiGenreResponseDto theMovieApiResponseDto = movieSearchApi.TheDramaDBSearchByGenre(genre);
         List<TheDramaApiResponseResultList> results = theMovieApiResponseDto.getResults();
 
-
-
         int videoCount = 0;
         for (TheDramaApiResponseResultList result : results) {
             System.out.println("videoCount = " + videoCount);
@@ -121,7 +119,7 @@ public class Schedule {
             //===============================================================
 
             //large Category
-            LargeCategory largeCategory = largeCategorySaveOrFind("drama");
+            LargeCategory largeCategory = largeCategorySaveOrFind("tvShow");
 
             //video
             Video newVideo = DramaSaveOrFind(result, findVideoUrl, largeCategory);

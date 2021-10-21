@@ -15,16 +15,32 @@ public class VideoController {
 
     private final VideoService videoService;
 
-    @GetMapping("/video")
-    public ResponseDto videoLargeCategory(@RequestParam String largeCategory){
-        LargeCategoryDto result = videoService.process(largeCategory);
+    @GetMapping("/video/movie")
+    public ResponseDto getMovie(){
+        LargeCategoryDto result = videoService.getMovie();
 
         return new ResponseDto(200L, "성공", result);
     }
 
+    @GetMapping("/video/tv_show")
+    public ResponseDto getTvShow(){
+        LargeCategoryDto result = videoService.getTvShow();
+
+        return new ResponseDto(200L, "성공", result);
+    }
+
+    @GetMapping("/video/random")
+    public ResponseDto getRandomShow(){
+        LargeCategoryDto result = videoService.getRandomShow();
+
+        return new ResponseDto(200L, "성공", result);
+    }
+
+
+
     @GetMapping("/videoCategory")
     public ResponseDto videoSmallCategory(@RequestParam String largeCategory , @RequestParam String smallCategory) {
-        LargeCategoryDto result = videoService.findtosmallcategory(largeCategory, smallCategory);
+        LargeCategoryDto result = videoService.findMovieToSmallCategory(largeCategory, smallCategory);
 
         return new ResponseDto(200L, "성공", result);
     }
