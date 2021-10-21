@@ -1,5 +1,6 @@
 package com.sparta.NeflixCloneCodingProjectBack.service;
 
+import com.sparta.NeflixCloneCodingProjectBack.MovieApi.DramaGenre;
 import com.sparta.NeflixCloneCodingProjectBack.MovieApi.MovieGenre;
 import com.sparta.NeflixCloneCodingProjectBack.domain.SmallCategory;
 import com.sparta.NeflixCloneCodingProjectBack.domain.Video;
@@ -25,19 +26,36 @@ public class VideoServiceImpl implements VideoService{
 
     @Override
     public LargeCategoryDto process(String LargeGenre) {
+        LargeCategoryDto largeCategoryDto = null; 
+        if(LargeGenre.equals("movie")) {
 
-        List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
-        for (MovieGenre genre : MovieGenre.values()) {
+            List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
+            for (MovieGenre genre : MovieGenre.values()) {
 
-            List<VideoResponseDto> videoResponseDtoList = new ArrayList<>();
-            findVideoListByCategory(genre.getGenreName(), videoResponseDtoList);
+                List<VideoResponseDto> videoResponseDtoList = new ArrayList<>();
+                findVideoListByCategory(genre.getGenreName(), videoResponseDtoList);
 
-            SmallCategoryDto smallCategoryDto = new SmallCategoryDto(videoResponseDtoList.size(), genre.getGenreName(), videoResponseDtoList);
-            smallCategoryDtoList.add(smallCategoryDto);
+                SmallCategoryDto smallCategoryDto = new SmallCategoryDto(videoResponseDtoList.size(), genre.getGenreName(), videoResponseDtoList);
+                smallCategoryDtoList.add(smallCategoryDto);
+            }
+
+            largeCategoryDto = new LargeCategoryDto(LargeGenre, smallCategoryDtoList);
+            
+        } else if (LargeGenre.equals("drama")) {
+            
+            List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
+            for (DramaGenre genre : DramaGenre.values()) {
+
+                List<VideoResponseDto> videoResponseDtoList = new ArrayList<>();
+                findVideoListByCategory(genre.getGenreName(), videoResponseDtoList);
+
+                SmallCategoryDto smallCategoryDto = new SmallCategoryDto(videoResponseDtoList.size(), genre.getGenreName(), videoResponseDtoList);
+                smallCategoryDtoList.add(smallCategoryDto);
+            }
+
+            largeCategoryDto = new LargeCategoryDto(LargeGenre, smallCategoryDtoList);
+                       
         }
-
-        LargeCategoryDto largeCategoryDto = new LargeCategoryDto(LargeGenre, smallCategoryDtoList);
-
         return largeCategoryDto;
     }
 

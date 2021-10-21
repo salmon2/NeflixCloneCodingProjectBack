@@ -2,6 +2,7 @@ package com.sparta.NeflixCloneCodingProjectBack.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.NeflixCloneCodingProjectBack.MovieApi.MovieGenre;
+import com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibygenredto.TheDramaApiResponseResultList;
 import com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibygenredto.TheMovieApiResponseResultList;
 import com.sparta.NeflixCloneCodingProjectBack.dto.themovieapibyiddto.VideoListResult;
 import lombok.Getter;
@@ -39,6 +40,27 @@ public class Video {
         this.backdrop_path = "https://image.tmdb.org/t/p/w500"+movie.getBackdrop_path();
     }
 
+    public Video(TheDramaApiResponseResultList drama, VideoListResult youtube, LargeCategory largeCategory) {
+        this.title = drama.getName();
+        this.original_language = drama.getOriginal_language();
+        this.original_title = drama.getOriginal_name();
+        this.overview = drama.getOverview();
+        this.popularity = drama.getPopularity();
+        this.posterPath = "https://image.tmdb.org/t/p/w500"+drama.getPoster_path();
+        this.release_date = drama.getFirst_air_date();
+
+        if(youtube == null)
+            this.youtubePath = null;
+        else
+            this.youtubePath = "https://www.youtube.com/embed/"+youtube.getKey()+"?autoplay=1&mute=1";
+
+        this.vote_average = drama.getVote_average();
+        this.vote_count = drama.getVote_count();
+        this.largeCategory = largeCategory;
+
+        this.backdrop_path = "https://image.tmdb.org/t/p/w500"+drama.getBackdrop_path();
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -69,8 +91,6 @@ public class Video {
 
     @Column
     private String backdrop_path;
-    @Column
-    private String genrename;
 
     @OneToMany(mappedBy = "video",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<VideoSmallCategory> videoSmallCategoryList = new ArrayList<>();

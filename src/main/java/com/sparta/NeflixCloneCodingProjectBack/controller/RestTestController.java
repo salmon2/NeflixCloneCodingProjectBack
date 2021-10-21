@@ -22,22 +22,22 @@ public class RestTestController {
         return new ResponseDto(500L, successMsg, theMovieApiByIdResponseDto);
     }
 
-    @RequestMapping("/testGenre")
-    public ResponseDto restTest2() throws Exception {
-
-        MovieSearchApi movieSearchApi = new MovieSearchApi();
-        TheMovieApiByGenreResponseDto theMovieApiResponseDto = movieSearchApi.TheMovieDBSearchByGenre(MovieGenre.Mystery);
-
-        return new ResponseDto(500L, successMsg, theMovieApiResponseDto);
-
-    }
-
-    @RequestMapping("/test")
-    public ResponseDto restTest3() throws Exception {
-
-        return new ResponseDto(500L, successMsg, null);
-
-    }
+//    @RequestMapping("/testGenre")
+//    public ResponseDto restTest2() throws Exception {
+//
+//        MovieSearchApi movieSearchApi = new MovieSearchApi();
+//        TheMovieApiByGenreResponseDto theMovieApiResponseDto = movieSearchApi.TheMovieDBSearchByGenre(MovieGenre.Mystery);
+//
+//        return new ResponseDto(500L, successMsg, theMovieApiResponseDto);
+//
+//    }
+//
+//    @RequestMapping("/test")
+//    public ResponseDto restTest3() throws Exception {
+//
+//        return new ResponseDto(500L, successMsg, null);
+//
+//    }
 
 
 }
