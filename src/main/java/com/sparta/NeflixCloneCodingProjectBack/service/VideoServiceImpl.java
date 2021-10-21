@@ -194,7 +194,7 @@ public class VideoServiceImpl implements VideoService{
         }
 
         VideoResponseDto newVideoResponseDto = new VideoResponseDto(genre, video.getId(), video.getTitle(), video.getPosterPath(), video.getOverview(),
-                video.getRelease_date(), video.getVote_average(), video.getYoutubePath(), video.getBackdrop_path());
+                video.getRelease_date(), video.getVote_average(), video.getYoutubePath(), video.getBackdrop_path(), video.getHomepage());
         return newVideoResponseDto;
     }
 

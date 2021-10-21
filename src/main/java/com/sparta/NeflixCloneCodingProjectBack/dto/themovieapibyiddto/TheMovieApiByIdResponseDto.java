@@ -10,7 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TheMovieApiByIdResponseDto {
-    private String backdrop_path;
+    private String homepage;
+
     private VideoListDto videos;
 }
 

@@ -21,4 +21,5 @@ public class VideoResponseDto {
     private Float grade;
     private String youtubePath;
     private String backdrop_path;
+    private String homepage;
 }
