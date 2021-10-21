@@ -26,14 +26,16 @@ public class VideoServiceImpl implements VideoService{
 
     @Override
     public LargeCategoryDto process(String LargeGenre) {
+
         LargeCategoryDto largeCategoryDto = null; 
         if(LargeGenre.equals("movie")) {
 
             List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
             for (MovieGenre genre : MovieGenre.values()) {
+                List<String> duplicateCheck = new ArrayList<>();
 
                 List<VideoResponseDto> videoResponseDtoList = new ArrayList<>();
-                findVideoListByCategory(genre.getGenreName(), videoResponseDtoList);
+                findVideoListByCategory(genre.getGenreName(), videoResponseDtoList, duplicateCheck);
 
                 SmallCategoryDto smallCategoryDto = new SmallCategoryDto(videoResponseDtoList.size(), genre.getGenreName(), videoResponseDtoList);
                 smallCategoryDtoList.add(smallCategoryDto);
@@ -45,9 +47,10 @@ public class VideoServiceImpl implements VideoService{
             
             List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
             for (DramaGenre genre : DramaGenre.values()) {
+                List<String> duplicateCheck = new ArrayList<>();
 
                 List<VideoResponseDto> videoResponseDtoList = new ArrayList<>();
-                findVideoListByCategory(genre.getGenreName(), videoResponseDtoList);
+                findVideoListByCategory(genre.getGenreName(), videoResponseDtoList, duplicateCheck);
 
                 SmallCategoryDto smallCategoryDto = new SmallCategoryDto(videoResponseDtoList.size(), genre.getGenreName(), videoResponseDtoList);
                 smallCategoryDtoList.add(smallCategoryDto);
@@ -63,8 +66,9 @@ public class VideoServiceImpl implements VideoService{
     public LargeCategoryDto findtosmallcategory(String movie, String smallcategory) {
         List<SmallCategoryDto> smallCategoryDtoList = new ArrayList<>();
         List<VideoResponseDto> videoResponseDtoList = new ArrayList<>();
+        List<String> duplicateCheck = new ArrayList<>();
 
-        findVideoListByCategory(smallcategory, videoResponseDtoList);
+        findVideoListByCategory(smallcategory, videoResponseDtoList, duplicateCheck);
 
         SmallCategoryDto smallCategoryDto = new SmallCategoryDto(videoResponseDtoList.size(), smallcategory, videoResponseDtoList);
         smallCategoryDtoList.add(smallCategoryDto);
@@ -74,33 +78,43 @@ public class VideoServiceImpl implements VideoService{
         return largeCategoryDto;
     }
 
-    private void findVideoListByCategory(String key, List<VideoResponseDto> videoResponseDtoList) {
+    private void findVideoListByCategory(String key, List<VideoResponseDto> videoResponseDtoList, List<String> duplicateCheck) {
         SmallCategory findSmallCategory = smallCategoryRepository.findBySmallCategoryName(key);
         System.out.println("Genre = " + key);
 
         List<VideoSmallCategory> videoSmallCategoryList = findSmallCategory.getVideoSmallCategoryList();
 
 
+
         int videoCount = 0;
         for (VideoSmallCategory videoSmallCategory : videoSmallCategoryList) {
-
-            Video video = videoSmallCategory.getVideo();
-
-            List<VideoSmallCategory> videoSmallCategoryList1 = video.getVideoSmallCategoryList();
-            List<String> genre = new ArrayList<>();
-            for (VideoSmallCategory smallCategory : videoSmallCategoryList1) {
-                if(videoCount > 20) {
-                    return;
-                }
-                genre.add(smallCategory.getSmallCategory().getSmallCategoryName());
-
+            if(videoCount > 20) {
+                return;
             }
 
-            VideoResponseDto newVideoResponseDto = new VideoResponseDto(genre, video.getId(), video.getTitle(), video.getPosterPath(), video.getOverview(),
-                    video.getRelease_date(), video.getVote_average(), video.getYoutubePath(), video.getBackdrop_path());
+            Video video = videoSmallCategory.getVideo();
+            boolean contains = duplicateCheck.contains(video.getTitle());
 
-            videoResponseDtoList.add(newVideoResponseDto);
-            videoCount +=1;
+            if(contains == true)
+                break;
+            else{
+                duplicateCheck.add(video.getTitle());
+                VideoResponseDto newVideoResponseDto = vedioToVideoResponseDto(video);
+                videoResponseDtoList.add(newVideoResponseDto);
+                videoCount +=1;
+            }
         }
+    }
+
+    private VideoResponseDto vedioToVideoResponseDto(Video video) {
+        List<VideoSmallCategory> videoSmallCategoryList1 = video.getVideoSmallCategoryList();
+        List<String> genre = new ArrayList<>();
+        for (VideoSmallCategory smallCategory : videoSmallCategoryList1) {
+            genre.add(smallCategory.getSmallCategory().getSmallCategoryName());
+        }
+
+        VideoResponseDto newVideoResponseDto = new VideoResponseDto(genre, video.getId(), video.getTitle(), video.getPosterPath(), video.getOverview(),
+                video.getRelease_date(), video.getVote_average(), video.getYoutubePath(), video.getBackdrop_path());
+        return newVideoResponseDto;
     }
 }

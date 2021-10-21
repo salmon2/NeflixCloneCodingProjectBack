@@ -60,7 +60,9 @@ public class Schedule {
         TheMovieApiByGenreResponseDto theMovieApiResponseDto = movieSearchApi.TheMovieDBSearchByGenre(genre);
         List<TheMovieApiResponseResultList> results = theMovieApiResponseDto.getResults();
 
-        int videoCount = 0;
+        List<String> duplicateCheck = new ArrayList<>();
+
+                int videoCount = 0;
         for (TheMovieApiResponseResultList result : results) {
             System.out.println("videoCount = " + videoCount);
             if(videoCount > 10)
@@ -83,12 +85,12 @@ public class Schedule {
             LargeCategory largeCategory = largeCategorySaveOrFind("movie");
 
             //video
-            Video newVideo = videoSaveOrFind(result, findVideoUrl, largeCategory);
+            Video newVideo = videoSaveOrFind(result, findVideoUrl, largeCategory, duplicateCheck);
 
             //smallCategory
             smallCategorySaveOrFind(genreList);
 
-            vedioSmallCategorySaveOrFind(newVideo, genreList);
+            videoSmallCategorySaveOrFind(newVideo, genreList);
             videoCount +=1;
         }
     }
@@ -96,6 +98,8 @@ public class Schedule {
     private void saveAllDomainDataByDramaGenre(DramaGenre genre) throws Exception {
         TheDramaApiGenreResponseDto theMovieApiResponseDto = movieSearchApi.TheDramaDBSearchByGenre(genre);
         List<TheDramaApiResponseResultList> results = theMovieApiResponseDto.getResults();
+
+
 
         int videoCount = 0;
         for (TheDramaApiResponseResultList result : results) {
@@ -140,11 +144,13 @@ public class Schedule {
         return null;
     }
 
-    private void vedioSmallCategorySaveOrFind(Video newVideo, List<MovieGenre> genreList) {
-        for (MovieGenre moviegenre : genreList) {
-            SmallCategory findSmallCategory = smallCategoryRepository.findBySmallCategoryName(moviegenre.getGenreName());
-            VideoSmallCategory newVideoSmallCategory = new VideoSmallCategory(newVideo, findSmallCategory);
-            videoSmallCategoryRepository.save(newVideoSmallCategory);
+    private void videoSmallCategorySaveOrFind(Video newVideo, List<MovieGenre> genreList) {
+        if (newVideo != null){
+            for (MovieGenre moviegenre : genreList) {
+                SmallCategory findSmallCategory = smallCategoryRepository.findBySmallCategoryName(moviegenre.getGenreName());
+                VideoSmallCategory newVideoSmallCategory = new VideoSmallCategory(newVideo, findSmallCategory);
+                videoSmallCategoryRepository.save(newVideoSmallCategory);
+            }
         }
     }
 
@@ -158,7 +164,12 @@ public class Schedule {
         }
     }
 
-    private Video videoSaveOrFind(TheMovieApiResponseResultList result, VideoListResult videoListResult, LargeCategory largeCategory) {
+    private Video videoSaveOrFind(TheMovieApiResponseResultList result, VideoListResult videoListResult, LargeCategory largeCategory, List<String> duplicateCheck) {
+        boolean contains = duplicateCheck.contains(result.getTitle());
+        if (contains == true)
+            return null;
+
+        duplicateCheck.add(result.getTitle());
         Video newVideo = new Video(result, videoListResult, largeCategory);
         videoRepository.save(newVideo);
         return newVideo;
