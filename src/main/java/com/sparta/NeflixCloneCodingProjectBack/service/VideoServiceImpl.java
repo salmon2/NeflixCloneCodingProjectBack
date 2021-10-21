@@ -6,6 +6,8 @@ import com.sparta.NeflixCloneCodingProjectBack.MovieApi.MovieGenre;
 import com.sparta.NeflixCloneCodingProjectBack.domain.SmallCategory;
 import com.sparta.NeflixCloneCodingProjectBack.domain.Video;
 import com.sparta.NeflixCloneCodingProjectBack.domain.VideoSmallCategory;
+import com.sparta.NeflixCloneCodingProjectBack.dto.genredto.MovieDto;
+import com.sparta.NeflixCloneCodingProjectBack.dto.genredto.TVDto;
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.LargeCategoryDto;
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.SmallCategoryDto;
 import com.sparta.NeflixCloneCodingProjectBack.dto.videoResponseDto.VideoResponseDto;
@@ -195,4 +197,25 @@ public class VideoServiceImpl implements VideoService{
                 video.getRelease_date(), video.getVote_average(), video.getYoutubePath(), video.getBackdrop_path());
         return newVideoResponseDto;
     }
+
+    @Override
+    public MovieDto findmoviegenre() {
+        List<String> moivegenre = new ArrayList<>();
+
+        for (MovieGenre genre : MovieGenre.values()){
+            moivegenre.add(genre.getGenreName());
+        }
+        return new MovieDto(moivegenre);
+    }
+
+    @Override
+    public TVDto findTVgenre() {
+        List<String> tvgenre = new ArrayList<>();
+
+        for (DramaGenre genre : DramaGenre.values()){
+            tvgenre.add(genre.getGenreName());
+        }
+        return new TVDto(tvgenre);
+    }
+
 }
