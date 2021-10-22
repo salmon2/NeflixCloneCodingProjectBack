@@ -71,6 +71,7 @@ public class Schedule {
             Long id = result.getId();
             TheMovieApiByIdResponseDto theMovieApiByIdResponseDto = movieSearchApi.TheMovieDBSearchById(id);
             VideoListResult[] videoList = theMovieApiByIdResponseDto.getVideos().getResults();
+            String homepage = theMovieApiByIdResponseDto.getHomepage();
 
             VideoListResult findVideoUrl;
 
@@ -85,7 +86,7 @@ public class Schedule {
             LargeCategory largeCategory = largeCategorySaveOrFind("movie");
 
             //video
-            Video newVideo = videoSaveOrFind(result, findVideoUrl, largeCategory, duplicateCheck);
+            Video newVideo = videoSaveOrFind(result, findVideoUrl, largeCategory, duplicateCheck, homepage);
 
             //smallCategory
             smallCategorySaveOrFind(genreList);
@@ -108,6 +109,7 @@ public class Schedule {
             Long id = result.getId();
             TheMovieApiByIdResponseDto theMovieApiByIdResponseDto = movieSearchApi.TheDramaDBSearchById(id);
             VideoListResult[] videoList = theMovieApiByIdResponseDto.getVideos().getResults();
+            String homepage = theMovieApiByIdResponseDto.getHomepage();
 
             VideoListResult findVideoUrl;
 
@@ -122,7 +124,7 @@ public class Schedule {
             LargeCategory largeCategory = largeCategorySaveOrFind("tvShow");
 
             //video
-            Video newVideo = DramaSaveOrFind(result, findVideoUrl, largeCategory);
+            Video newVideo = DramaSaveOrFind(result, findVideoUrl, largeCategory, homepage);
 
             //smallCategory
             DramasmallCategorySaveOrFind(genreList);
@@ -162,13 +164,15 @@ public class Schedule {
         }
     }
 
-    private Video videoSaveOrFind(TheMovieApiResponseResultList result, VideoListResult videoListResult, LargeCategory largeCategory, List<String> duplicateCheck) {
+    private Video videoSaveOrFind(TheMovieApiResponseResultList result, VideoListResult videoListResult,
+                                  LargeCategory largeCategory, List<String> duplicateCheck,
+                                  String homepage) {
         boolean contains = duplicateCheck.contains(result.getTitle());
         if (contains == true)
             return null;
 
         duplicateCheck.add(result.getTitle());
-        Video newVideo = new Video(result, videoListResult, largeCategory);
+        Video newVideo = new Video(result, videoListResult, largeCategory, homepage);
         videoRepository.save(newVideo);
         return newVideo;
     }
@@ -198,8 +202,8 @@ public class Schedule {
         }
     }
 
-    private Video DramaSaveOrFind(TheDramaApiResponseResultList result, VideoListResult videoListResult, LargeCategory largeCategory) {
-        Video newVideo = new Video(result, videoListResult, largeCategory);
+    private Video DramaSaveOrFind(TheDramaApiResponseResultList result, VideoListResult videoListResult, LargeCategory largeCategory, String homepage) {
+        Video newVideo = new Video(result, videoListResult, largeCategory, homepage);
         videoRepository.save(newVideo);
         return newVideo;
     }

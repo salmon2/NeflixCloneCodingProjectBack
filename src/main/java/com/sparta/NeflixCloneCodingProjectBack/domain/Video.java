@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Video {
-    public Video(TheMovieApiResponseResultList movie, VideoListResult youtube, LargeCategory largeCategory) {
+    public Video(TheMovieApiResponseResultList movie, VideoListResult youtube, LargeCategory largeCategory, String homepage) {
         this.adult = movie.getAdult();
         this.title = movie.getTitle();
         this.original_language = movie.getOriginal_language();
@@ -38,9 +38,10 @@ public class Video {
         this.largeCategory = largeCategory;
 
         this.backdrop_path = "https://image.tmdb.org/t/p/w500"+movie.getBackdrop_path();
+        this.homepage = homepage;
     }
 
-    public Video(TheDramaApiResponseResultList drama, VideoListResult youtube, LargeCategory largeCategory) {
+    public Video(TheDramaApiResponseResultList drama, VideoListResult youtube, LargeCategory largeCategory, String homepage) {
         this.title = drama.getName();
         this.original_language = drama.getOriginal_language();
         this.original_title = drama.getOriginal_name();
@@ -59,6 +60,7 @@ public class Video {
         this.largeCategory = largeCategory;
 
         this.backdrop_path = "https://image.tmdb.org/t/p/w500"+drama.getBackdrop_path();
+        this.homepage =homepage;
     }
 
 
@@ -88,6 +90,8 @@ public class Video {
     private Float vote_average;
     @Column
     private Long vote_count;
+    @Column
+    private String homepage;
 
     @Column
     private String backdrop_path;
@@ -99,5 +103,6 @@ public class Video {
     @JsonIgnore
     @JoinColumn(name = "largeCategoryId")
     private LargeCategory largeCategory;
+
 
 }
