@@ -39,8 +39,7 @@
 
 ## 🖥API 설계
 
-![API](https://www.notion.so/16a999bbf52942d48c2092fc1535a28e?v=55e53c73af19457f8cf0df4cce430a5c)
-
+[API](https://bejewled-paradox-cb7.notion.site/16a999bbf52942d48c2092fc1535a28e?v=55e53c73af19457f8cf0df4cce430a5c)
 
 ## 프로젝트의 주요 관심사 
 
